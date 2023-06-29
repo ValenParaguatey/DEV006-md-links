@@ -94,15 +94,30 @@ return links;
           ok: 'fail',
         };
       };
-    });
+    })
+    .catch((error)=>{
+      return {
+        href: link.href,
+        text: link.text,
+        file: link.file,
+        status: error.response.status,
+        ok: 'fail',
+      };
+    })
   });
   return Promise.all(promises)
  }
 
  const getMarkdownFiles = (dir) => {
-  const files = fs.readdirSync(dir);
-  const markdownFiles = files.filter((file)=> path.extname(file)=== '.md');
-  return markdownFiles.map((file)=> path.join(dir,file));
+  return fs.promises.readdir(dir)
+  .then((files)=> {
+const markdownFiles = files.filter((file)=> path.extname(file)==='.md');
+return markdownFiles.map((file)=> path.join(dir,file));
+  })
+  .catch((error)=>{
+    console.log(`Error al leer el directorio ${dir}: ${error}`);
+    throw error
+  });
  };
 
 

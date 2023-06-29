@@ -8,23 +8,32 @@ const mdLinks = (route, options = {validate: false}) => {
     .then((routeTransform)=> fileOrDirectory(routeTransform))
     .then(({route,tipo})=>{
         if(tipo === 'archivo'){
-            return readFile(route)
-            .then((content)=> extractLinks(content,route))
-            .then((links)=> options.validate ? validateLinks(links) : Promise.resolve(links)
-            );
+            if(path.extname(route) === '.md'){
+                return readFile(route)
+                .then((content)=> extractLinks(content,route))
+                .then((links)=> options.validate ? validateLinks(links) : Promise.resolve(links)
+                );
+            }else {
+                throw new Error('No es archivo .md');
+                 }
+            
         }else if (tipo=== 'directorio'){
             return new Promise((resolve, reject)=>{
-                const markdownFiles = getMarkdownFiles(route);
-                const promises = markdownFiles.map((file)=>
-                readFile(file)
-                .then((content)=> extractLinks(content,file))
-                .then((links)=> options.validate ? validateLinks(links) : Promise.resolve(links)
-                )
-                );
-                Promise.all(promises)
-                .then((results)=>{
-                    const links = results.flat();
-                    resolve(links);
+                getMarkdownFiles(route)
+                .then((markdownFiles)=>{
+                    const promises = markdownFiles.map((file)=>
+                    readFile(file)
+                    .then((content)=> extractLinks(content, route))
+                    .then((links)=>
+                    options.validate? validateLinks(links):Promise.resolve(links)
+                    )
+                    );
+                    Promise.all(promises)
+                    .then((result)=>{
+                        const links = result.flat();
+                        resolve(links);
+                    })
+                    .catch(reject);
                 })
                 .catch(reject);
             });
@@ -32,15 +41,13 @@ const mdLinks = (route, options = {validate: false}) => {
     });
 };
 
+mdLinks(route,{validate: true}).then((result)=>{
+    console.log(result);
+  }).catch((error)=>{
+      console.log(error);
+     })
 
-mdLinks(route,true).then((result)=>{
-      console.log(result);
-    }).catch((error)=>{
-        console.log(error);
-       })
-
-
-
+module.exports = {mdLinks};
 
 
 
@@ -49,37 +56,11 @@ mdLinks(route,true).then((result)=>{
 
 
 
-// function mdLinks(route, options) {
-//    return validateRoute(route)
-//       .then(existPath)
-//       .then(fileOrDirectory)
-//       .then((resultado) => {
-//         if (resultado.tipo === 'archivo') {
-//           if (path.extname(route) === '.md') {
-//             return readFile(resultado.route)
-//               .then((content) => extractLinks(content)).then((links)=>{
-//                   if (options && options.validate === 'true'){
-//                     return validateLinks(links);
-//                   }else {
-//                     return links
-//                   }
-//               })
-//               .catch((error) => {
-//                 throw new Error(`Error al extraer los links: ${error}`);
-//               });
-//           } else {
-//             throw new Error('No es archivo .md');
-//           }
-//         } else {
-//           throw new Error('La ruta es un directorio');
-//         }
-//       });
-//   };
-  
-//   mdLinks(route).then((result)=>{
-//     console.log(result);
-//   }).catch((error)=>{
-//     console.log(error);
-//   })
+
+
+
+
+
+
     
   
