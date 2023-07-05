@@ -6,7 +6,7 @@ const { default: axios } = require('axios');
 const route = process.argv[2];
 
 const validateRoute= (route) => {
-  return new Promise((resolve, reject)=>{
+  return new Promise((resolve)=>{
     if(path.isAbsolute(route)){
       resolve(route);
     }else {

@@ -201,8 +201,8 @@ describe('mdLinks function',()=>{
    assert.deepStrictEqual(links,
     [
     {href:'https://github.com/ValenParaguatey/DEV006-social-network/blob/main/src/assets/readme/HU%203.png?raw=true', text: 'HU-3', file: 'C:/dev006-md-links/DEV006-md-links/pruebas/prueba1.md', status:200, ok:'ok'},
-    {href: 'https://github.com/ValenParaguatey/DEV006-social-network/blob/main/src/assets/readme/HU%204.png?raw=true', text: 'HU-4', file: 'C:/dev006-md-links/DEV006-md-links/pruebas/prueba1.md', status:200, ok:'ok'},
-    {href: 'https://github.com/ValenParaguatey/DEV006-social-network/blob/main/src/assets/readme/HU%205.png?raw=true', text: 'HU-5', file:'C:/dev006-md-links/DEV006-md-links/pruebas/prueba1.md', status:200, ok:'ok'},
+    {href: 'https://github.com/ValenParaguatey/DEV006-social-network/blob/main/src/assets/readme/HU%204.png?raw=true', text: 'HU-4', file: 'C:/dev006-md-links/DEV006-md-links/pruebas/prueba1.md', status:404, ok:'fail'},
+    {href: 'https://github.com/ValenParaguatey/DEV006-social-network/blob/main/src/assets/readme/HU%205.png?raw=true', text: 'HU-5', file:'C:/dev006-md-links/DEV006-md-links/pruebas/prueba1.md', status:404, ok:'fail'},
     ]);
   })
  })
